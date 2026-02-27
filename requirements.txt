@@ -1,0 +1,3 @@
+# Global pip dependencies for custom ComfyUI setup
+# Add any packages needed by custom nodes or workflows here
+# (Custom node-specific deps go in custom_nodes/<name>/requirements.txt)

@@ -1,0 +1,37 @@
+# =============================================================================
+# ComfyUI - Custom Docker (CPU image generation)
+# Built on yanwk/comfyui-boot:cpu with:
+#   - Vendored workflows (auto-copied into ComfyUI on boot)
+#   - Model auto-resolver (downloads missing weights on first start)
+#   - Custom node support (git-based or direct copy)
+#
+# Bind-mounted folders under COMFYUI_DATA (default: ./data) persist across
+# rebuilds and are shared with the OpenClaw container.
+#
+# To disable model auto-download on startup:
+#   RESOLVE_MODELS=false docker compose up -d
+# =============================================================================
+services:
+  comfyui:
+    build: .
+    image: jgriffith3433/comfyui-docker:latest
+    container_name: comfyui
+    environment:
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188 --cpu
+      - RESOLVE_MODELS=${RESOLVE_MODELS:-true}
+    volumes:
+      # Persistent data (shared with Claw container)
+      - comfyui-storage:/root
+      - ${COMFYUI_DATA:-./data}/models:/root/ComfyUI/models
+      - ${COMFYUI_DATA:-./data}/input:/root/ComfyUI/input
+      - ${COMFYUI_DATA:-./data}/output:/root/ComfyUI/output
+      - ${COMFYUI_DATA:-./data}/custom_nodes:/root/ComfyUI/custom_nodes
+      - ${COMFYUI_DATA:-./data}/workflows:/root/ComfyUI/user/default/workflows
+      # Scripts (resolver, etc.)
+      - ./scripts:/scripts
+    ports:
+      - "${COMFYUI_PORT:-8188}:8188"
+    restart: unless-stopped
+
+volumes:
+  comfyui-storage:

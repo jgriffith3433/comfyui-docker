@@ -1,0 +1,4 @@
+{
+  "_comment": "Local model override database. For models not found in ComfyUI-Manager or HuggingFace. The resolver auto-adds entries here when it finds models via HF/Civitai search.",
+  "models": []
+}
