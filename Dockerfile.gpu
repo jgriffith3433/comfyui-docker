@@ -1,0 +1,35 @@
+# =============================================================================
+# ComfyUI GPU image — for EC2 deployment with NVIDIA GPUs
+# Same as the CPU Dockerfile but uses the GPU-enabled base image.
+# =============================================================================
+FROM yanwk/comfyui-boot:cu128-slim
+
+# Scripts (model resolver, etc.)
+COPY scripts/ /scripts/
+
+# Vendored workflows
+COPY workflows/ /bundled-workflows/
+
+# Custom nodes
+COPY custom_nodes/ /bundled-custom-nodes/
+
+# Install pip deps for custom nodes
+RUN for req in /bundled-custom-nodes/*/requirements.txt; do \
+        if [ -f "$req" ]; then \
+            echo "[BUILD] Installing deps from $req" && \
+            pip install --no-cache-dir -r "$req" || true; \
+        fi; \
+    done
+
+# Global pip deps
+COPY requirements.txt /bundled-requirements.txt
+RUN if [ -s /bundled-requirements.txt ]; then \
+        pip install --no-cache-dir -r /bundled-requirements.txt; \
+    fi
+
+# Pre-start hook and entrypoint wrapper
+COPY entrypoint-hook.sh /bundled-pre-start.sh
+COPY entrypoint-wrapper.sh /entrypoint-wrapper.sh
+RUN chmod +x /entrypoint-wrapper.sh
+
+CMD ["bash", "/entrypoint-wrapper.sh"]

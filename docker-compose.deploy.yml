@@ -1,0 +1,30 @@
+# =============================================================================
+# ComfyUI GPU — EC2 deploy config (pull-only, no build context)
+# Copied to EC2 server, then: docker compose -f docker-compose.deploy.yml up -d
+# =============================================================================
+services:
+  comfyui:
+    image: jgriffith3433/comfyui-docker:gpu
+    container_name: comfyui
+    environment:
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188
+      - RESOLVE_MODELS=true
+    volumes:
+      - comfyui-storage:/root
+      - ./data/models:/root/ComfyUI/models
+      - ./data/output:/root/ComfyUI/output
+      - ./data/input:/root/ComfyUI/input
+      - ./data/custom_nodes:/root/ComfyUI/custom_nodes
+    ports:
+      - "8188:8188"
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  comfyui-storage:
