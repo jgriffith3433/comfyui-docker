@@ -2,6 +2,18 @@
 # ComfyUI GPU — for EC2 deployment
 # Build: docker compose -f docker-compose.gpu.yml build
 # Push:  docker compose -f docker-compose.gpu.yml push
+#
+# Deploy on server:
+#   docker compose -f docker-compose.gpu.yml pull
+#   docker compose -f docker-compose.gpu.yml up -d
+#
+# Models, outputs, and inputs are stored in named Docker volumes.
+# These persist across container recreates/upgrades as long as you
+# don't run `docker volume prune` or terminate the instance.
+#
+# IMPORTANT: g4dn NVMe is ephemeral! If Docker data-root is on NVMe,
+# stopping the instance loses everything. Use EBS-backed storage for
+# model persistence. See deploy docs for EBS setup.
 # =============================================================================
 services:
   comfyui:
@@ -16,11 +28,10 @@ services:
       - CLI_ARGS=--listen 0.0.0.0 --port 8188
       - RESOLVE_MODELS=${RESOLVE_MODELS:-true}
     volumes:
-      - comfyui-storage:/root
-      - ./data/models:/root/ComfyUI/models
-      - ./data/output:/root/ComfyUI/output
-      - ./data/input:/root/ComfyUI/input
-      - ./data/custom_nodes:/root/ComfyUI/custom_nodes
+      # Named volumes — persist across container recreates
+      - comfyui-models:/root/ComfyUI/models
+      - comfyui-output:/root/ComfyUI/output
+      - comfyui-input:/root/ComfyUI/input
     ports:
       - "8188:8188"
     restart: unless-stopped
@@ -33,4 +44,6 @@ services:
               capabilities: [gpu]
 
 volumes:
-  comfyui-storage:
+  comfyui-models:
+  comfyui-output:
+  comfyui-input:
