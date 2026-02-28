@@ -1,0 +1,80 @@
+{
+  "_comment": "Advanced video generation models for ComfyUI upgrade",
+  
+  "checkpoints/AOM3A1_orangemixs.safetensors": {
+    "url": "https://huggingface.co/WarriorMama777/OrangeMixs/resolve/main/Models/AbyssOrangeMix3/AOM3A1_orangemixs.safetensors",
+    "size": "2.13GB"
+  },
+  
+  "checkpoints/svd_xt.safetensors": {
+    "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/resolve/main/svd_xt.safetensors",
+    "size": "9.56GB",
+    "priority": 1,
+    "description": "Stable Video Diffusion XL - Best for character consistency"
+  },
+  
+  "checkpoints/svd.safetensors": {
+    "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid/resolve/main/svd.safetensors", 
+    "size": "9.56GB",
+    "priority": 2,
+    "description": "Stable Video Diffusion standard model"
+  },
+  
+  "diffusion_models/CogVideoX-5B-I2V": {
+    "url": "https://huggingface.co/THUDM/CogVideoX-5B-I2V",
+    "type": "folder",
+    "size": "20GB",
+    "priority": 1,
+    "description": "CogVideoX 5B Image-to-Video - Excellent temporal consistency"
+  },
+  
+  "diffusion_models/ltx-video-2b-v0.9.safetensors": {
+    "url": "https://huggingface.co/Lightricks/LTX-Video/resolve/main/ltx-video-2b-v0.9.safetensors",
+    "size": "5.13GB", 
+    "priority": 1,
+    "description": "LTX-Video - Latest high-quality video generation"
+  },
+  
+  "diffusion_models/hunyuan-video-t2v-720p": {
+    "url": "https://huggingface.co/tencent/HunyuanVideo",
+    "type": "folder",
+    "size": "18GB",
+    "priority": 2,
+    "description": "HunyuanVideo - Alternative premium video model"
+  },
+  
+  "animatediff_models/v3_sd15_mm.ckpt": {
+    "url": "https://huggingface.co/guoyww/animatediff/resolve/main/v3_sd15_mm.ckpt",
+    "size": "1.6GB",
+    "priority": 3,
+    "description": "AnimateDiff v3 (legacy) - keeping for compatibility"
+  },
+  
+  "controlnet/control_v11p_sd15_depth.pth": {
+    "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_depth.pth",
+    "size": "1.45GB",
+    "priority": 2,
+    "description": "ControlNet depth for camera control"
+  },
+  
+  "controlnet/control_v11f1e_sd15_tile.pth": {
+    "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1e_sd15_tile.pth", 
+    "size": "1.45GB",
+    "priority": 2,
+    "description": "ControlNet tile for upscaling"
+  },
+  
+  "ipadapter/ip-adapter_sd15.safetensors": {
+    "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors",
+    "size": "97.8MB",
+    "priority": 2,
+    "description": "IP-Adapter for style transfer"
+  },
+  
+  "clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors": {
+    "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors",
+    "size": "2.5GB", 
+    "priority": 2,
+    "description": "CLIP Vision encoder for image understanding"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "title": "LTX-Video Character Animation",
+    "description": "Latest LTX-Video model for superior character consistency"
+  },
+  "1": {
+    "inputs": {
+      "image": "",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {"title": "Load Character Image"}
+  },
+  "2": {
+    "inputs": {
+      "model_name": "ltx-video-2b-v0.9.safetensors"
+    },
+    "class_type": "DownloadAndLoadLTXVideoModel",
+    "_meta": {"title": "Load LTX-Video Model"}
+  },
+  "3": {
+    "inputs": {
+      "prompt": "A cute green slime character performing a gentle idle animation. The character maintains perfect consistency in appearance, color, and shape. Subtle breathing motion with slight vertical movement. The character's eyes and facial expression remain identical. Smooth, natural animation loop. High quality, game character sprite animation.",
+      "negative_prompt": "morphing, changing shape, different character, multiple characters, inconsistent appearance, distortion, artifacts, blur",
+      "width": 400,
+      "height": 400,
+      "num_frames": 121,
+      "frame_rate": 12,
+      "seed": 12345,
+      "steps": 30,
+      "guidance_scale": 3.0,
+      "model": ["2", 0],
+      "image": ["1", 0]
+    },
+    "class_type": "LTXVideoSampler",
+    "_meta": {"title": "Generate LTX Animation"}
+  },
+  "4": {
+    "inputs": {
+      "start_frame": 0,
+      "frame_count": 16,
+      "step": 8,
+      "images": ["3", 0]
+    },
+    "class_type": "VHS_SelectEveryNthImage",
+    "_meta": {"title": "Select Animation Frames"}
+  },
+  "5": {
+    "inputs": {
+      "filename_prefix": "ltx_character_frames",
+      "format": "PNG",
+      "extension": "png",
+      "images": ["4", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {"title": "Save Sprite Frames"}
+  },
+  "6": {
+    "inputs": {
+      "filename_prefix": "ltx_character_animation",
+      "fps": 12,
+      "loop_count": 0,
+      "filename_delimiter": "_",
+      "filename_number_padding": 5,
+      "filename_number_start": 0,
+      "extension": "mp4",
+      "format": "video/h264-mp4",
+      "crf": 18,
+      "save_metadata": true,
+      "pingpong": true,
+      "save_output": false,
+      "images": ["4", 0]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {"title": "Export Video Loop"}
+  }
+}

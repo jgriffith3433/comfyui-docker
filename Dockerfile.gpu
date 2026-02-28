@@ -4,27 +4,46 @@
 # =============================================================================
 FROM yanwk/comfyui-boot:cu128-slim
 
+# Fix permission issues from base image
+RUN find /usr/local/lib/python* -type l -exec chmod -h 755 {} \; 2>/dev/null || true
+
 # Scripts (model resolver, etc.)
 COPY scripts/ /scripts/
 
 # Vendored workflows
 COPY workflows/ /bundled-workflows/
 
-# Custom nodes
+# Custom nodes (existing)
 COPY custom_nodes/ /bundled-custom-nodes/
 
-# Install pip deps for custom nodes
+# Install advanced video generation nodes
+COPY install-advanced-video-nodes.sh /install-advanced-video-nodes.sh
+RUN chmod +x /install-advanced-video-nodes.sh && \
+    bash /install-advanced-video-nodes.sh
+
+# Install pip deps for all custom nodes (existing + advanced)
 RUN for req in /bundled-custom-nodes/*/requirements.txt; do \
         if [ -f "$req" ]; then \
             echo "[BUILD] Installing deps from $req" && \
+            pip install --no-cache-dir -r "$req" || true; \
+        fi; \
+    done && \
+    for req in /default-comfyui-bundle/ComfyUI/custom_nodes/*/requirements.txt; do \
+        if [ -f "$req" ]; then \
+            echo "[BUILD] Installing advanced node deps from $req" && \
             pip install --no-cache-dir -r "$req" || true; \
         fi; \
     done
 
 # Global pip deps
 COPY requirements.txt /bundled-requirements.txt
+COPY requirements-advanced.txt /bundled-requirements-advanced.txt
 RUN if [ -s /bundled-requirements.txt ]; then \
         pip install --no-cache-dir -r /bundled-requirements.txt; \
+    fi && \
+    if [ -s /bundled-requirements-advanced.txt ]; then \
+        echo "[BUILD] Installing advanced video generation deps..." && \
+        pip install --no-cache-dir -r /bundled-requirements-advanced.txt; \
     fi
 
 # Pre-start hook and entrypoint wrapper

@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "title": "CogVideoX Character Animation", 
+    "description": "CogVideoX workflow for high-quality character consistency"
+  },
+  "1": {
+    "inputs": {
+      "image": "",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {"title": "Load Character Image"}
+  },
+  "2": {
+    "inputs": {
+      "model": "CogVideoX-5B-I2V"
+    },
+    "class_type": "DownloadAndLoadCogVideoModel",
+    "_meta": {"title": "Load CogVideoX Model"}
+  },
+  "3": {
+    "inputs": {
+      "prompt": "The cute green slime character gently breathing and moving slightly, maintaining the exact same appearance, subtle idle animation, no background changes, character consistency is key",
+      "negative_prompt": "changing appearance, different character, morphing, distortion, multiple characters, background changes",
+      "num_frames": 16,
+      "height": 400,
+      "width": 400,
+      "fps": 12,
+      "guidance_scale": 6.0,
+      "num_inference_steps": 50,
+      "seed": 42,
+      "model": ["2", 0],
+      "image": ["1", 0]
+    },
+    "class_type": "CogVideoXSampler",
+    "_meta": {"title": "Generate Character Animation"}
+  },
+  "4": {
+    "inputs": {
+      "filename_prefix": "cogvideox_character",
+      "fps": 12,
+      "loop_count": 0,
+      "filename_delimiter": "_",
+      "filename_number_padding": 5,
+      "filename_number_start": 0,
+      "extension": "mp4",
+      "format": "video/h264-mp4",
+      "crf": 20,
+      "save_metadata": true,
+      "pingpong": true,
+      "save_output": false,
+      "images": ["3", 0]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {"title": "Export Video"}
+  },
+  "5": {
+    "inputs": {
+      "images": ["3", 0],
+      "filename_prefix": "cogvideox_frames",
+      "format": "PNG",
+      "extension": "png"
+    },
+    "class_type": "SaveImage", 
+    "_meta": {"title": "Save Individual Frames"}
+  }
+}

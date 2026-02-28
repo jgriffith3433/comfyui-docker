@@ -9,6 +9,52 @@
       "filename": "v3_sd15_mm.ckpt",
       "url": "https://huggingface.co/guoyww/animatediff/resolve/main/v3_sd15_mm.ckpt",
       "description": "AnimateDiff v3 motion model for SD 1.5"
+    },
+    {
+      "name": "AOM3 Orange Mix",
+      "type": "checkpoints",
+      "base": "SD1.5",
+      "save_path": "checkpoints",
+      "filename": "AOM3A1_orangemixs.safetensors",
+      "url": "https://huggingface.co/WarriorMama777/OrangeMixs/resolve/main/Models/AbyssOrangeMix3/AOM3A1_orangemixs.safetensors",
+      "description": "High quality anime/manga checkpoint"
+    },
+    {
+      "name": "Stable Video Diffusion XT",
+      "type": "checkpoints",
+      "base": "SVD",
+      "save_path": "checkpoints",
+      "filename": "svd_xt.safetensors",
+      "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/resolve/main/svd_xt.safetensors",
+      "description": "Stable Video Diffusion XL - Best for character consistency"
+    },
+    {
+      "name": "Stable Video Diffusion",
+      "type": "checkpoints",
+      "base": "SVD",
+      "save_path": "checkpoints",
+      "filename": "svd.safetensors",
+      "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid/resolve/main/svd.safetensors",
+      "description": "Stable Video Diffusion standard model"
+    },
+    {
+      "name": "CogVideoX 5B I2V",
+      "type": "diffusion_models",
+      "base": "CogVideoX",
+      "save_path": "diffusion_models",
+      "filename": "CogVideoX-5B-I2V",
+      "url": "https://huggingface.co/THUDM/CogVideoX-5B-I2V",
+      "description": "CogVideoX 5B Image-to-Video - Excellent temporal consistency",
+      "is_directory": true
+    },
+    {
+      "name": "LTX Video 2B",
+      "type": "diffusion_models", 
+      "base": "LTX",
+      "save_path": "diffusion_models",
+      "filename": "ltx-video-2b-v0.9.safetensors",
+      "url": "https://huggingface.co/Lightricks/LTX-Video/resolve/main/ltx-video-2b-v0.9.safetensors",
+      "description": "LTX-Video - Latest high-quality video generation"
     }
   ]
 }

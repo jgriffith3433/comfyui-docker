@@ -1,0 +1,46 @@
+# Advanced video generation dependencies
+# These are commonly needed by SVD, CogVideoX, LTX-Video, etc.
+
+# Video processing and generation
+diffusers>=0.30.0
+accelerate>=0.34.0
+transformers>=4.45.0
+xformers>=0.0.22
+
+# Advanced model support  
+safetensors>=0.4.0
+tokenizers>=0.20.0
+einops>=0.8.0
+
+# Video-specific libraries
+imageio>=2.34.0
+imageio-ffmpeg>=0.5.0
+av>=12.0.0
+decord>=0.6.0
+
+# SVD/Stability AI requirements
+omegaconf>=2.3.0
+pytorch-lightning>=2.1.0
+triton>=2.1.0
+
+# CogVideoX requirements  
+sentencepiece>=0.2.0
+protobuf>=4.25.0
+
+# LTX-Video requirements
+torchvision>=0.19.0
+torchaudio>=2.4.0
+
+# Motion and control
+opencv-python>=4.10.0
+scikit-image>=0.24.0
+scipy>=1.14.0
+
+# Performance and memory
+psutil>=6.0.0
+py3nvml>=0.2.7
+
+# Utilities
+tqdm>=4.66.0
+requests>=2.32.0
+huggingface-hub>=0.25.0

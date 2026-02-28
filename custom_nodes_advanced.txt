@@ -1,0 +1,44 @@
+# Advanced Video Generation Nodes for ComfyUI
+# These will give us Veo-quality results with proper camera control
+
+# Stable Video Diffusion (SVD) - Much better than AnimateDiff
+https://github.com/Stability-AI/generative-models.git
+
+# ComfyUI-SVD - SVD wrapper for ComfyUI  
+https://github.com/marshmellow77/ComfyUI-SVD.git
+
+# CogVideoX - Excellent video generation with temporal consistency
+https://github.com/kijai/ComfyUI-CogVideoXWrapper.git
+
+# LTX-Video - Latest video model with superior results
+https://github.com/Lightricks/LTX-Video.git
+
+# ComfyUI-LTX-Video - LTX wrapper
+https://github.com/kijai/ComfyUI-LTXVideo.git
+
+# ComfyUI-HunyuanVideoWrapper - Another excellent video model
+https://github.com/kijai/ComfyUI-HunyuanVideoWrapper.git
+
+# Moore-AnimateAnyone - Better character consistency 
+https://github.com/MooreThreads/Moore-AnimateAnyone.git
+
+# ComfyUI-VideoCrewAI - Advanced video control
+https://github.com/videocrewai/ComfyUI-VideoCrewAI.git
+
+# ComfyUI-IC-Light - Better lighting control
+https://github.com/huchenlei/ComfyUI-IC-Light.git
+
+# ComfyUI-ControlNet-Aux - Camera movement control
+https://github.com/Fannovel16/comfyui_controlnet_aux.git
+
+# ComfyUI-Advanced-ControlNet - More control options
+https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet.git
+
+# ComfyUI-Frame-Interpolation - Smooth between frames
+https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git
+
+# ComfyUI-MotionCtrl - Precise camera and motion control
+https://github.com/chaojie/ComfyUI-MotionCtrl.git
+
+# ComfyUI-Depth-Pro - Better depth control for camera moves
+https://github.com/spacepxl/ComfyUI-Depth-Pro.git

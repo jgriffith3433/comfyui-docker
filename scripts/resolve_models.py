@@ -65,6 +65,18 @@ LOADER_MAP = {
     # AnimateDiff
     "ADE_LoadAnimateDiffModel": ("animatediff_models", "model_name"),
     "ADE_AnimateDiffLoaderWithContext": ("animatediff_models", "model_name"),
+    
+    # Video Generation - Stable Video Diffusion
+    "ImageOnlyCheckpointLoader": ("checkpoints", "ckpt_name"),
+    "SVD_img2vid_Conditioning": ("checkpoints", "ckpt_name"),
+    
+    # Video Generation - CogVideoX
+    "DownloadAndLoadCogVideoModel": ("diffusion_models", "model"),
+    "CogVideoXSampler": ("diffusion_models", "model"),
+    
+    # Video Generation - LTX-Video
+    "DownloadAndLoadLTXVideoModel": ("diffusion_models", "model_name"),
+    "LTXVideoSampler": ("diffusion_models", "model"),
 }
 
 # Some loaders check multiple directories
