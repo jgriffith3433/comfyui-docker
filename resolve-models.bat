@@ -68,7 +68,7 @@ REM --- Handle "all" ---
 if /i "%WORKFLOW%"=="all" (
     echo.
     echo Resolving all bundled workflows...
-    docker exec -it %CONTAINER% sh -c "for wf in %BUNDLED_DIR%/*.json; do echo \"\" && echo \"=== $(basename $wf) ===\" && python3 %SCRIPTS_DIR%/resolve_models.py -w \"$wf\" -m %MODELS_DIR% --auto; done"
+    docker exec -it %CONTAINER% sh -c "for wf in /bundled-workflows/*.json; do echo && echo '=== '$(basename $wf)' ===' && python3 /scripts/resolve_models.py -w $wf -m /root/ComfyUI/models --auto; done"
     echo.
     pause
     exit /b 0

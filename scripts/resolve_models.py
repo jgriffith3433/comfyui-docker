@@ -62,6 +62,9 @@ LOADER_MAP = {
     "HypernetworkLoader":       ("hypernetworks", "hypernetwork_name"),
     # Embeddings (textual inversion)
     "EmbeddingLoader":          ("embeddings", "embedding_name"),
+    # AnimateDiff
+    "ADE_LoadAnimateDiffModel": ("animatediff_models", "model_name"),
+    "ADE_AnimateDiffLoaderWithContext": ("animatediff_models", "model_name"),
 }
 
 # Some loaders check multiple directories
@@ -70,6 +73,7 @@ FALLBACK_DIRS = {
     "unet": ["diffusion_models"],
     "clip": ["text_encoders"],
     "text_encoders": ["clip"],
+    "animatediff_models": ["custom_nodes/ComfyUI-AnimateDiff-Evolved/models"],
 }
 
 # ---------------------------------------------------------------------------

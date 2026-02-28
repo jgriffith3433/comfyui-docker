@@ -1,0 +1,1 @@
+https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git

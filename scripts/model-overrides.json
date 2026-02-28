@@ -1,4 +1,14 @@
 {
   "_comment": "Local model override database. For models not found in ComfyUI-Manager or HuggingFace. The resolver auto-adds entries here when it finds models via HF/Civitai search.",
-  "models": []
+  "models": [
+    {
+      "name": "AnimateDiff v3 SD1.5",
+      "type": "animatediff_models",
+      "base": "SD1.5",
+      "save_path": "animatediff_models",
+      "filename": "v3_sd15_mm.ckpt",
+      "url": "https://huggingface.co/guoyww/animatediff/resolve/main/v3_sd15_mm.ckpt",
+      "description": "AnimateDiff v3 motion model for SD 1.5"
+    }
+  ]
 }
