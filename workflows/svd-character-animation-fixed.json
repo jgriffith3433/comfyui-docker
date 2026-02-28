@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "title": "SVD Character Animation",
+    "description": "Stable Video Diffusion workflow for consistent character animation"
+  },
+  "1": {
+    "inputs": {
+      "image": "",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {"title": "Load Input Image"}
+  },
+  "2": {
+    "inputs": {
+      "ckpt_name": "svd_xt.safetensors"
+    },
+    "class_type": "ImageOnlyCheckpointLoader", 
+    "_meta": {"title": "Load SVD Model"}
+  },
+  "3": {
+    "inputs": {
+      "width": 400,
+      "height": 400, 
+      "video_frames": 14,
+      "motion_bucket_id": 127,
+      "fps": 12,
+      "augmentation_level": 0.0,
+      "model": ["2", 0],
+      "vae": ["2", 2],
+      "clip_vision": ["2", 1],
+      "init_image": ["1", 0]
+    },
+    "class_type": "SVD_img2vid_Conditioning",
+    "_meta": {"title": "SVD Conditioning"}
+  },
+  "4": {
+    "inputs": {
+      "noise_seed": 42,
+      "steps": 20, 
+      "cfg": 2.5,
+      "sampler_name": "euler",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["2", 0],
+      "positive": ["3", 0],
+      "negative": ["3", 1], 
+      "latent_image": ["3", 2]
+    },
+    "class_type": "KSampler",
+    "_meta": {"title": "Generate Video"}
+  },
+  "5": {
+    "inputs": {
+      "samples": ["4", 0],
+      "vae": ["2", 2]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {"title": "Decode Frames"}
+  },
+  "6": {
+    "inputs": {
+      "filename_prefix": "svd_character_animation",
+      "fps": 12,
+      "loop_count": 0,
+      "filename_delimiter": "_",
+      "filename_number_padding": 5,
+      "filename_number_start": 0,
+      "extension": "gif",
+      "format": "image/gif",
+      "pix_fmt": "palettegen=reserve_transparent=0",
+      "crf": 19,
+      "save_metadata": true,
+      "pingpong": false,
+      "save_output": false,
+      "images": ["5", 0]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {"title": "Combine to Video/GIF"}
+  }
+}
