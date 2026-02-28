@@ -1,7 +1,7 @@
 {
   "_meta": {
     "title": "SVD Character Animation",
-    "description": "Stable Video Diffusion workflow for consistent character animation"
+    "description": "Stable Video Diffusion — generates video frames from a single character image"
   },
   "1": {
     "inputs": {
@@ -15,67 +15,54 @@
     "inputs": {
       "ckpt_name": "svd_xt.safetensors"
     },
-    "class_type": "ImageOnlyCheckpointLoader", 
+    "class_type": "ImageOnlyCheckpointLoader",
     "_meta": {"title": "Load SVD Model"}
   },
   "3": {
     "inputs": {
-      "width": 400,
-      "height": 400, 
+      "width": 512,
+      "height": 512,
       "video_frames": 14,
       "motion_bucket_id": 127,
-      "fps": 12,
+      "fps": 6,
       "augmentation_level": 0.0,
-      "model": ["2", 0],
-      "vae": ["2", 1],
-      "clip_vision": ["2", 2],
-      "init_image": ["1", 0]
+      "clip_vision": ["2", 1],
+      "init_image": ["1", 0],
+      "vae": ["2", 2]
     },
     "class_type": "SVD_img2vid_Conditioning",
     "_meta": {"title": "SVD Conditioning"}
   },
   "4": {
     "inputs": {
-      "noise_seed": 42,
-      "steps": 20, 
+      "seed": 42,
+      "steps": 20,
       "cfg": 2.5,
       "sampler_name": "euler",
       "scheduler": "karras",
       "denoise": 1.0,
       "model": ["2", 0],
       "positive": ["3", 0],
-      "negative": ["3", 1], 
+      "negative": ["3", 1],
       "latent_image": ["3", 2]
     },
     "class_type": "KSampler",
-    "_meta": {"title": "Generate Video"}
+    "_meta": {"title": "Sample Video Frames"}
   },
   "5": {
     "inputs": {
       "samples": ["4", 0],
-      "vae": ["2", 1]
+      "vae": ["2", 2]
     },
     "class_type": "VAEDecode",
     "_meta": {"title": "Decode Frames"}
   },
   "6": {
     "inputs": {
-      "filename_prefix": "svd_character_animation",
-      "fps": 12,
-      "loop_count": 0,
-      "filename_delimiter": "_",
-      "filename_number_padding": 5,
-      "filename_number_start": 0,
-      "extension": "gif",
-      "format": "image/gif",
-      "pix_fmt": "palettegen=reserve_transparent=0",
-      "crf": 19,
-      "save_metadata": true,
-      "pingpong": false,
-      "save_output": false,
+      "filename_prefix": "svd_character",
       "images": ["5", 0]
     },
-    "class_type": "VHS_VideoCombine",
-    "_meta": {"title": "Combine to Video/GIF"}
+    "class_type": "SaveImage",
+    "_meta": {"title": "Save Frames"}
   }
 }

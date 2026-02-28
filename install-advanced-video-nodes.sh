@@ -4,97 +4,64 @@ set -e
 echo "🚀 Installing Advanced Video Generation Nodes for ComfyUI"
 echo "========================================================="
 
-# Check ComfyUI directory exists
-if [ ! -d "/default-comfyui-bundle/ComfyUI/custom_nodes" ]; then
-    echo "❌ ComfyUI custom_nodes directory not found!"
-    ls -la /default-comfyui-bundle/ComfyUI/ || true
+NODES_DIR="/default-comfyui-bundle/ComfyUI/custom_nodes"
+
+if [ ! -d "$NODES_DIR" ]; then
+    echo "❌ ComfyUI custom_nodes directory not found at $NODES_DIR"
     exit 1
 fi
 
-cd /default-comfyui-bundle/ComfyUI/custom_nodes
+cd "$NODES_DIR"
 
-echo "📁 Working directory: $(pwd)"
+clone_node() {
+    local name="$1"
+    local url="$2"
+    if [ ! -d "$name" ]; then
+        echo "📦 Installing $name..."
+        git clone --depth 1 "$url" "$name" && echo "  ✅ $name installed" || echo "  ❌ $name FAILED"
+    else
+        echo "  ✅ $name already exists"
+    fi
+}
 
-# Install Priority 1: Essential video generation models
+# ==========================================================================
+# Video Generation Nodes
+# ==========================================================================
 echo ""
-echo "🎬 PRIORITY 1: Core Video Generation Models"
-echo "============================================"
+echo "🎬 VIDEO GENERATION NODES"
 
-# SVD (Stable Video Diffusion) - BEST for character consistency
-echo "📹 Installing SVD (Stable Video Diffusion)..."
-if [ ! -d "ComfyUI-SVD" ]; then
-    git clone https://github.com/marshmellow77/ComfyUI-SVD.git && \
-    echo "✅ SVD installed" || echo "❌ SVD failed"
-else
-    echo "✅ SVD already exists"
-fi
+# CogVideoX — best for character consistency from a reference image
+clone_node "ComfyUI-CogVideoXWrapper" "https://github.com/kijai/ComfyUI-CogVideoXWrapper.git"
 
-# CogVideoX - Excellent temporal stability
-echo "🧠 Installing CogVideoX..."  
-if [ ! -d "ComfyUI-CogVideoXWrapper" ]; then
-    git clone https://github.com/kijai/ComfyUI-CogVideoXWrapper.git && \
-    echo "✅ CogVideoX installed" || echo "❌ CogVideoX failed"
-else
-    echo "✅ CogVideoX already exists"
-fi
+# LTX-Video — official Lightricks node, high quality video gen
+clone_node "ComfyUI-LTXVideo" "https://github.com/Lightricks/ComfyUI-LTXVideo.git"
 
-# LTX-Video - Latest high-quality model
-echo "⚡ Installing LTX-Video..."
-if [ ! -d "ComfyUI-LTXVideo" ]; then
-    git clone https://github.com/kijai/ComfyUI-LTXVideo.git && \
-    echo "✅ LTX-Video installed" || echo "❌ LTX-Video failed"  
-else
-    echo "✅ LTX-Video already exists"
-fi
+# NOTE: SVD (Stable Video Diffusion) is BUILT INTO ComfyUI core.
+# Uses ImageOnlyCheckpointLoader + SVD_img2vid_Conditioning. No custom node needed.
 
-# Install Priority 2: Control and enhancement nodes
+# ==========================================================================
+# Control & Enhancement Nodes
+# ==========================================================================
 echo ""
-echo "🎛️ PRIORITY 2: Control & Enhancement Nodes" 
-echo "==========================================="
+echo "🎛️ CONTROL & ENHANCEMENT NODES"
 
-# ControlNet Auxiliary - Camera control
-echo "🎮 Installing ControlNet-Aux..."
-if [ ! -d "comfyui_controlnet_aux" ]; then
-    git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
-    echo "✅ ControlNet-Aux installed" || echo "❌ ControlNet-Aux failed"
-else
-    echo "✅ ControlNet-Aux already exists"
-fi
+clone_node "ComfyUI-Advanced-ControlNet" "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet.git"
+clone_node "comfyui_controlnet_aux"      "https://github.com/Fannovel16/comfyui_controlnet_aux.git"
+clone_node "ComfyUI-Frame-Interpolation" "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git"
+clone_node "ComfyUI-IC-Light"            "https://github.com/huchenlei/ComfyUI-IC-Light.git"
 
-# Advanced ControlNet
-echo "🎛️ Installing Advanced-ControlNet..."
-if [ ! -d "ComfyUI-Advanced-ControlNet" ]; then
-    git clone https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet.git && \
-    echo "✅ Advanced-ControlNet installed" || echo "❌ Advanced-ControlNet failed"
-else
-    echo "✅ Advanced-ControlNet already exists"
-fi
-
-# Frame Interpolation
-echo "🎞️ Installing Frame-Interpolation..."
-if [ ! -d "ComfyUI-Frame-Interpolation" ]; then
-    git clone https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git && \
-    echo "✅ Frame-Interpolation installed" || echo "❌ Frame-Interpolation failed"
-else  
-    echo "✅ Frame-Interpolation already exists"
-fi
-
-# IC-Light for better lighting
-echo "💡 Installing IC-Light..."
-if [ ! -d "ComfyUI-IC-Light" ]; then
-    git clone https://github.com/huchenlei/ComfyUI-IC-Light.git && \
-    echo "✅ IC-Light installed" || echo "❌ IC-Light failed"
-else
-    echo "✅ IC-Light already exists"  
-fi
+# ==========================================================================
+# Install Python dependencies for all cloned nodes
+# ==========================================================================
+echo ""
+echo "📦 INSTALLING PYTHON DEPENDENCIES"
+for req in "$NODES_DIR"/*/requirements.txt; do
+    [ -f "$req" ] || continue
+    node="$(basename "$(dirname "$req")")"
+    echo "  pip install for $node..."
+    pip install --no-cache-dir -r "$req" 2>&1 | tail -1 || true
+done
 
 echo ""
-echo "🎉 ADVANCED VIDEO NODES INSTALLATION COMPLETE!"
-echo "==============================================="
-echo ""
-echo "✅ Installed nodes:"
-ls -1 /default-comfyui-bundle/ComfyUI/custom_nodes/ | grep -E "(SVD|CogVideo|LTX|controlnet|ControlNet|Frame|IC-Light)" || echo "⚠️ No advanced nodes found"
-
-echo ""
-echo "🎯 Ready for Veo-quality video generation!"
-echo "Models will be downloaded on first use."
+echo "🎉 Advanced node installation complete!"
+ls -1 "$NODES_DIR/" | grep -vE '(example|websocket|__pycache__)'

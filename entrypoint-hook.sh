@@ -30,19 +30,38 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 2. Install custom nodes
+# 2a. Copy build-time advanced nodes to runtime
 # ---------------------------------------------------------------------------
-echo "[HOOK] Checking for custom nodes..."
+BUILD_NODES="/default-comfyui-bundle/ComfyUI/custom_nodes"
+if [ -d "$BUILD_NODES" ]; then
+    echo "[HOOK] Syncing build-time custom nodes to runtime..."
+    for node_dir in "$BUILD_NODES"/*/; do
+        case "$node_dir" in *'*'*) break ;; esac
+        node_name="$(basename "$node_dir")"
+        target="${CUSTOM_NODES_DIR}/${node_name}"
+        # Skip non-node entries
+        [ -f "${node_dir}/__init__.py" ] || [ -f "${node_dir}/nodes.py" ] || [ -f "${node_dir}/pyproject.toml" ] || continue
+        if [ ! -d "${target}" ]; then
+            echo "[HOOK] Copying build-time node: ${node_name}"
+            cp -r "${node_dir}" "${target}"
+        else
+            echo "[HOOK] Build-time node already present: ${node_name}"
+        fi
+    done
+fi
+
+# ---------------------------------------------------------------------------
+# 2b. Install vendored custom nodes (from /bundled-custom-nodes)
+# ---------------------------------------------------------------------------
+echo "[HOOK] Checking for vendored custom nodes..."
 if [ -d /bundled-custom-nodes ]; then
     for node_dir in /bundled-custom-nodes/*/; do
-        # If glob didn't match, the literal string contains *
         case "$node_dir" in *'*'*) break ;; esac
 
         node_name="$(basename "$node_dir")"
         target="${CUSTOM_NODES_DIR}/${node_name}"
 
         if [ -f "${node_dir}/repo.txt" ]; then
-            # Git-based custom node
             repo_url="$(head -1 "${node_dir}/repo.txt" | tr -d '[:space:]')"
             if [ ! -d "${target}/.git" ]; then
                 echo "[HOOK] Cloning custom node: ${node_name} from ${repo_url}"
@@ -55,7 +74,6 @@ if [ -d /bundled-custom-nodes ]; then
                 pip install --no-cache-dir -r "${target}/requirements.txt" || true
             fi
         elif [ -f "${node_dir}/__init__.py" ] || [ -f "${node_dir}/nodes.py" ]; then
-            # Direct copy custom node (only if it looks like a real node)
             if [ ! -d "${target}" ]; then
                 echo "[HOOK] Copying custom node: ${node_name}"
                 cp -r "${node_dir}" "${target}"
@@ -65,7 +83,7 @@ if [ -d /bundled-custom-nodes ]; then
         fi
     done
 else
-    echo "[HOOK] No custom nodes directory found."
+    echo "[HOOK] No vendored custom nodes directory found."
 fi
 
 # ---------------------------------------------------------------------------
