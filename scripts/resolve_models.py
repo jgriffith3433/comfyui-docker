@@ -77,6 +77,12 @@ LOADER_MAP = {
     # Video Generation - LTX-Video
     "DownloadAndLoadLTXVideoModel": ("diffusion_models", "model_name"),
     "LTXVideoSampler": ("diffusion_models", "model"),
+    
+    # Video Generation - CogVideoX GGUF
+    "DownloadAndLoadCogVideoGGUFModel": ("CogVideo", "model"),
+    
+    # Video Generation - CogVideoX VAE
+    "CogVideoXVAELoader": ("vae", "vae_name"),
 }
 
 # Some loaders check multiple directories

@@ -72,11 +72,29 @@ EOF
     echo "[STORAGE] Docker using EBS root volume. Data persists across stop/start."
 }
 
+setup_swap() {
+    local SWAP_SIZE="${1:-16G}"
+    echo "[STORAGE] Setting up ${SWAP_SIZE} swap..."
+    if swapon --show | grep -q /swapfile; then
+        echo "[STORAGE] Swap already active."
+    else
+        sudo fallocate -l "$SWAP_SIZE" /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=$((${SWAP_SIZE%G} * 1024))
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        echo "[STORAGE] Swap enabled: ${SWAP_SIZE}"
+    fi
+    # Make persistent across reboots
+    grep -q '/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+}
+
 case "$MODE" in
     ephemeral)
+        setup_swap
         setup_ephemeral
         ;;
     ebs)
+        setup_swap
         setup_ebs
         ;;
     *)

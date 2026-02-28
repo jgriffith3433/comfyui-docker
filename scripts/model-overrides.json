@@ -1,14 +1,14 @@
 {
-  "_comment": "Local model override database. For models not found in ComfyUI-Manager or HuggingFace. The resolver auto-adds entries here when it finds models via HF/Civitai search.",
+  "_comment": "Local model override database. Models the resolver should know about.",
   "models": [
     {
-      "name": "AnimateDiff v3 SD1.5",
-      "type": "animatediff_models",
-      "base": "SD1.5",
-      "save_path": "animatediff_models",
-      "filename": "v3_sd15_mm.ckpt",
-      "url": "https://huggingface.co/guoyww/animatediff/resolve/main/v3_sd15_mm.ckpt",
-      "description": "AnimateDiff v3 motion model for SD 1.5"
+      "name": "T5-XXL FP8 Text Encoder",
+      "type": "clip",
+      "base": "T5",
+      "save_path": "clip/t5",
+      "filename": "google_t5-v1_1-xxl_encoderonly-fp8_e4m3fn.safetensors",
+      "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors",
+      "description": "T5-XXL FP8 text encoder — used by CogVideoX, SD3, Flux"
     },
     {
       "name": "AOM3 Orange Mix",
@@ -17,7 +17,7 @@
       "save_path": "checkpoints",
       "filename": "AOM3A1_orangemixs.safetensors",
       "url": "https://huggingface.co/WarriorMama777/OrangeMixs/resolve/main/Models/AbyssOrangeMix3/AOM3A1_orangemixs.safetensors",
-      "description": "High quality anime/manga checkpoint"
+      "description": "High quality anime/manga checkpoint for SD 1.5"
     },
     {
       "name": "Stable Video Diffusion XT",
@@ -26,35 +26,17 @@
       "save_path": "checkpoints",
       "filename": "svd_xt.safetensors",
       "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/resolve/main/svd_xt.safetensors",
-      "description": "Stable Video Diffusion XL - Best for character consistency"
+      "description": "Stable Video Diffusion XL"
     },
     {
-      "name": "Stable Video Diffusion",
-      "type": "checkpoints",
-      "base": "SVD",
-      "save_path": "checkpoints",
-      "filename": "svd.safetensors",
-      "url": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid/resolve/main/svd.safetensors",
-      "description": "Stable Video Diffusion standard model"
-    },
-    {
-      "name": "CogVideoX 5B I2V",
-      "type": "diffusion_models",
-      "base": "CogVideoX",
-      "save_path": "diffusion_models",
-      "filename": "CogVideoX-5B-I2V",
-      "url": "https://huggingface.co/THUDM/CogVideoX-5B-I2V",
-      "description": "CogVideoX 5B Image-to-Video - Excellent temporal consistency",
-      "is_directory": true
-    },
-    {
-      "name": "LTX Video 2B",
-      "type": "diffusion_models", 
-      "base": "LTX",
-      "save_path": "diffusion_models",
-      "filename": "ltx-video-2b-v0.9.safetensors",
-      "url": "https://huggingface.co/Lightricks/LTX-Video/resolve/main/ltx-video-2b-v0.9.safetensors",
-      "description": "LTX-Video - Latest high-quality video generation"
+      "name": "AnimateDiff v3 SD1.5",
+      "type": "animatediff_models",
+      "base": "SD1.5",
+      "save_path": "animatediff_models",
+      "filename": "v3_sd15_mm.ckpt",
+      "url": "https://huggingface.co/guoyww/animatediff/resolve/main/v3_sd15_mm.ckpt",
+      "description": "AnimateDiff v3 motion model for SD 1.5"
     }
-  ]
+  ],
+  "_note": "CogVideoX GGUF models and CogVideoX VAE are auto-downloaded by DownloadAndLoadCogVideoGGUFModel node. T5 encoder must be pre-downloaded."
 }

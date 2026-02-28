@@ -107,6 +107,26 @@ else
     echo "[HOOK] Model resolution disabled (RESOLVE_MODELS=false)."
 fi
 
+# ---------------------------------------------------------------------------
+# 4. Ensure T5 text encoder exists (needed by CogVideoX, not auto-downloaded)
+# ---------------------------------------------------------------------------
+T5_DIR="${MODELS_DIR}/clip/t5"
+T5_FILE="${T5_DIR}/google_t5-v1_1-xxl_encoderonly-fp8_e4m3fn.safetensors"
+if [ ! -f "${T5_FILE}" ]; then
+    echo "[HOOK] Downloading T5-XXL FP8 text encoder (~4.9GB)..."
+    mkdir -p "${T5_DIR}"
+    T5_URL="https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors"
+    if command -v aria2c &> /dev/null; then
+        aria2c -x 16 -s 16 -d "${T5_DIR}" -o "google_t5-v1_1-xxl_encoderonly-fp8_e4m3fn.safetensors" "${T5_URL}" \
+            || echo "[HOOK] WARN: T5 download failed"
+    else
+        wget -O "${T5_FILE}" "${T5_URL}" \
+            || echo "[HOOK] WARN: T5 download failed"
+    fi
+else
+    echo "[HOOK] T5 text encoder already present."
+fi
+
 echo "========================================"
 echo "[HOOK] Pre-start hook complete."
 echo "========================================"

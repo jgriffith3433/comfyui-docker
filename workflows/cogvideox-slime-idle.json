@@ -1,0 +1,103 @@
+{
+  "1": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "t5/google_t5-v1_1-xxl_encoderonly-fp8_e4m3fn.safetensors",
+      "type": "sd3"
+    }
+  },
+  "2": {
+    "class_type": "DownloadAndLoadCogVideoGGUFModel",
+    "inputs": {
+      "model": "CogVideoX_5b_1_5_I2V_GGUF_Q4_0.safetensors",
+      "vae_precision": "bf16",
+      "fp8_fastmode": false,
+      "load_device": "main_device",
+      "enable_sequential_cpu_offload": false,
+      "attention_mode": "sdpa"
+    }
+  },
+  "3": {
+    "class_type": "CogVideoTextEncode",
+    "inputs": {
+      "clip": ["1", 0],
+      "prompt": "A still image of a green slime monster sitting motionless on a black background, the slime surface has very slight subtle ripples, the character does not move or change shape, static camera, no movement, almost a photograph, only the tiniest wobble on the slime surface",
+      "strength": 1,
+      "force_offload": true
+    }
+  },
+  "4": {
+    "class_type": "CogVideoTextEncode",
+    "inputs": {
+      "clip": ["1", 0],
+      "prompt": "The video is not of a high quality, it has a low resolution. Watermark present in each frame. Strange motion trajectory.",
+      "strength": 1,
+      "force_offload": true
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "slime-concept.png"
+    }
+  },
+  "6": {
+    "class_type": "ImageResizeKJ",
+    "inputs": {
+      "image": ["5", 0],
+      "width": 768,
+      "height": 768,
+      "upscale_method": "lanczos",
+      "keep_proportion": false,
+      "divisible_by": 16
+    }
+  },
+  "7": {
+    "class_type": "CogVideoImageEncode",
+    "inputs": {
+      "vae": ["2", 1],
+      "start_image": ["6", 0],
+      "enable_tiling": false,
+      "noise_aug_strength": 0
+    }
+  },
+  "8": {
+    "class_type": "CogVideoSampler",
+    "inputs": {
+      "model": ["2", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "num_frames": 25,
+      "steps": 25,
+      "cfg": 6.0,
+      "seed": 77,
+      "scheduler": "DPM++",
+      "image_cond_latents": ["7", 0]
+    }
+  },
+  "9": {
+    "class_type": "CogVideoDecode",
+    "inputs": {
+      "vae": ["2", 1],
+      "samples": ["8", 0],
+      "enable_vae_tiling": true,
+      "tile_sample_min_height": 240,
+      "tile_sample_min_width": 240,
+      "tile_overlap_factor_height": 0.2,
+      "tile_overlap_factor_width": 0.2,
+      "auto_tile_size": true
+    }
+  },
+  "10": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["9", 0],
+      "frame_rate": 8,
+      "loop_count": 0,
+      "filename_prefix": "cogvideo_slime_idle_v3",
+      "format": "image/gif",
+      "pingpong": false,
+      "save_output": true
+    }
+  }
+}
